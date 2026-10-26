@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-label="Coupon Bot trying discount codes at checkout, then finding one that is not rejected">
+<style>
+:root{--paper:#fbf3e4;--ink:#1f1a17;--muted:#6f655b;--line:#d9c9ad;--accent:#e4572e;--ok:#2e7d4f;--track:#e6d8bd}
+@media (prefers-color-scheme:dark){:root{--ink:#f6ead7;--muted:#b3a593}}
+.title{font:italic 800 50px Georgia,"Iowan Old Style",serif;fill:var(--ink)}.title tspan{fill:var(--accent)}
+.sub{font:20px ui-rounded,"SF Pro Rounded",system-ui,sans-serif;fill:var(--muted)}
+.card{fill:var(--paper);stroke:var(--line);stroke-width:2;stroke-dasharray:7 5}
+.brand{font:italic 800 17px Georgia,serif;fill:#1f1a17}.brand tspan{fill:var(--accent)}
+.pill{fill:#1f1a17}.btn{font:800 12px system-ui,sans-serif;fill:#fbf3e4}
+.code{font:800 30px ui-monospace,"SF Mono",Menlo,monospace;fill:#1f1a17}.okc{fill:var(--ok)}
+.msg{font:14px ui-rounded,system-ui,sans-serif;fill:#6f655b}
+.track{fill:var(--track)}.fill{fill:var(--accent)}.fillok{fill:var(--ok)}
+@keyframes s0{0.00%,12.49%{opacity:1}12.50%,100%{opacity:0}}@keyframes s1{0%,12.49%{opacity:0}12.50%,24.99%{opacity:1}25.00%,100%{opacity:0}}@keyframes s2{0%,24.99%{opacity:0}25.00%,37.49%{opacity:1}37.50%,100%{opacity:0}}@keyframes s3{0%,37.49%{opacity:0}37.50%,49.99%{opacity:1}50.00%,100%{opacity:0}}@keyframes s4{0%,49.99%{opacity:0}50.00%,62.49%{opacity:1}62.50%,100%{opacity:0}}@keyframes s5{0%,62.49%{opacity:0}62.50%,99.99%{opacity:1}100.00%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){g[style]{animation:none!important}g[opacity]{display:none}}
+</style>
+<text x="40" y="128" class="title">Coupon<tspan>Bot</tspan></text>
+<text x="42" y="168" class="sub">Tries common discount codes</text>
+<text x="42" y="194" class="sub">for your country. One at a time.</text>
+<rect x="420" y="52" width="320" height="168" rx="14" class="card"/>
+<text x="440" y="86" class="brand">Coupon<tspan>Bot</tspan></text>
+<rect x="666" y="70" width="54" height="24" rx="8" class="pill"/>
+<rect x="440" y="180" width="280" height="6" rx="3" class="track"/>
+<g style="animation:s0 16s infinite">
+    <text x="440" y="140" class="code ">WELKOM10</text>
+    <text x="440" y="164" class="msg">Trying 1 of 151</text>
+    <rect x="440" y="180" width="6" height="6" rx="3" class="fill"/>
+    <text x="693" y="87" text-anchor="middle" class="btn">Stop</text>
+  </g><g style="animation:s1 16s infinite" opacity="0">
+    <text x="440" y="140" class="code ">BIENVENUE10</text>
+    <text x="440" y="164" class="msg">Trying 9 of 151</text>
+    <rect x="440" y="180" width="17" height="6" rx="3" class="fill"/>
+    <text x="693" y="87" text-anchor="middle" class="btn">Stop</text>
+  </g><g style="animation:s2 16s infinite" opacity="0">
+    <text x="440" y="140" class="code ">NEW10</text>
+    <text x="440" y="164" class="msg">Trying 16 of 151</text>
+    <rect x="440" y="180" width="30" height="6" rx="3" class="fill"/>
+    <text x="693" y="87" text-anchor="middle" class="btn">Stop</text>
+  </g><g style="animation:s3 16s infinite" opacity="0">
+    <text x="440" y="140" class="code ">NIEUWSBRIEF10</text>
+    <text x="440" y="164" class="msg">Trying 23 of 151</text>
+    <rect x="440" y="180" width="43" height="6" rx="3" class="fill"/>
+    <text x="693" y="87" text-anchor="middle" class="btn">Stop</text>
+  </g><g style="animation:s4 16s infinite" opacity="0">
+    <text x="440" y="140" class="code ">KORTING10</text>
+    <text x="440" y="164" class="msg">Trying 45 of 151</text>
+    <rect x="440" y="180" width="83" height="6" rx="3" class="fill"/>
+    <text x="693" y="87" text-anchor="middle" class="btn">Stop</text>
+  </g><g style="animation:s5 16s infinite" opacity="0">
+    <text x="440" y="140" class="code okc">BLACKFRIDAY15</text>
+    <text x="440" y="164" class="msg">Not rejected. Check your total before paying.</text>
+    <rect x="440" y="180" width="280" height="6" rx="3" class="fillok"/>
+    <text x="693" y="87" text-anchor="middle" class="btn">Close</text>
+  </g>
+</svg>
