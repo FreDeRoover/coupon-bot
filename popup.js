@@ -1,11 +1,11 @@
-import { build, patterns } from "./markets.js";
+import { build, order, patterns } from "./markets.js";
 
 const $ = (id) => document.getElementById(id);
 const DELAY = 2500;
 
 // Runs inside the page. Slow on purpose: it stops at the first code that isn't
 // rejected, so it can't hammer a shop's validation endpoint.
-async function tryCodes(codes, delay, pat) {
+async function tryCodes(codes, delay, pat, key) {
   const re = (k) => new RegExp(pat[k], "i");
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   document.getElementById("coupon-bot")?.remove();
@@ -31,6 +31,10 @@ async function tryCodes(codes, delay, pat) {
       .fill { height: 100%; width: 0; background: #e4572e; transition: width .3s; }
       .ok { border: 2px solid #2e7d4f; } .ok .code { color: #2e7d4f; }
       .done .bar { display: none; }
+      [hidden] { display: none !important; }
+      .confirm { display: flex; gap: 8px; margin-top: 10px; }
+      .confirm button { flex: 1; text-align: center; padding: 7px 10px; }
+      #no { background: #6f655b; }
       @keyframes in { from { opacity: 0; transform: translateY(8px); } }
       @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
     </style>
@@ -39,6 +43,7 @@ async function tryCodes(codes, delay, pat) {
       <div class="code" id="code">Looking for coupon field...</div>
       <div class="msg" id="msg"></div>
       <div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="confirm" id="confirm" hidden><button id="yes">It worked</button><button id="no">Didn't work</button></div>
     </div>`;
   document.documentElement.append(host);
   const $r = (id) => root.getElementById(id);
@@ -48,10 +53,33 @@ async function tryCodes(codes, delay, pat) {
     card.classList.toggle("ok", !!ok);
     $r("code").textContent = code;
     $r("msg").textContent = msg;
+    $r("confirm").hidden = true;
     $r("x").textContent = "Close";
     $r("x").onclick = () => host.remove();
   };
-  $r("x").onclick = () => { window.__couponRun++; finish("Stopped", "Check the cart: the last code tried may still be applied.", false); };
+  const armStop = () => {
+    $r("x").textContent = "Stop";
+    $r("x").onclick = () => { window.__couponRun++; finish("Stopped", "Check the cart: the last code tried may still be applied.", false); };
+  };
+  armStop();
+
+  // remembered per shop (hostname) in chrome.storage.local; never leaves the browser
+  const save = async (change) => {
+    const s = (await chrome.storage.local.get(key))[key] || {};
+    change(s);
+    await chrome.storage.local.set({ [key]: s });
+  };
+  // true = it worked, false = it didn't, null = banner closed
+  const ask = (code) => new Promise((resolve) => {
+    card.classList.add("ok");
+    $r("code").textContent = code;
+    $r("msg").textContent = "Not rejected. Did your total drop?";
+    $r("confirm").hidden = false;
+    $r("yes").onclick = () => resolve(true);
+    $r("no").onclick = () => resolve(false);
+    $r("x").textContent = "Close";
+    $r("x").onclick = () => resolve(null);
+  });
 
   // page text as a set of lines; our own banner is hidden while measuring
   const lines = () => {
@@ -91,7 +119,17 @@ async function tryCodes(codes, delay, pat) {
     await sleep(delay);
     if (window.__couponRun !== run) return;
     const added = [...lines()].filter((l) => !before.has(l)).join(" ");
-    if (!ERR.test(added)) return finish(code, "Not rejected. Check your total before paying.", true);
+    if (ERR.test(added)) continue;
+    const worked = await ask(code);
+    if (worked === null) return host.remove();
+    if (worked) {
+      await save((s) => { s.win = code; s.bad = (s.bad || []).filter((c) => c !== code); });
+      return finish(code, `Saved for ${key}. Enjoy the discount.`, true);
+    }
+    await save((s) => { s.bad = [...(s.bad || []), code]; if (s.win === code) delete s.win; });
+    card.classList.remove("ok");
+    $r("confirm").hidden = true;
+    armStop();
   }
   finish("No code worked", "Try adding the shop name to the list.", false);
 }
@@ -108,8 +146,13 @@ const guess = ids.find((id) => markets[id].regions.includes(new Intl.Locale(navi
 $("market").value = localStorage.getItem("market") ?? guess;
 $("extra").value = localStorage.getItem("extra") || "";
 
+const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+const key = tab?.url ? new URL(tab.url).hostname.replace(/^www\./, "") : "";
+const saved = key ? (await chrome.storage.local.get(key))[key] || {} : {};
+$("mem").textContent = saved.win ? `Remembered for ${key}: ${saved.win}` : "";
+
 const market = () => markets[$("market").value];
-const codes = () => build(market(), global, $("extra").value.split(","));
+const codes = () => order(build(market(), global, $("extra").value.split(",")), saved);
 
 const update = () => {
   const n = codes().length;
@@ -123,8 +166,7 @@ update();
 $("try").onclick = async () => {
   $("err").textContent = "";
   try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: tryCodes, args: [codes(), DELAY, patterns(market(), global)] });
+    await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: tryCodes, args: [codes(), DELAY, patterns(market(), global), key] });
     window.close();
   } catch {
     $("err").textContent = "Can't run on this page. Open a shop's cart or checkout tab first.";

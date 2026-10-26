@@ -19,3 +19,7 @@ export const patterns = (market, global) => {
   const all = (k) => [...global.ui[k], ...(market ? market.ui[k] : [])];
   return { error: alt(all("error")), field: alt(all("field")), button: alt(all("button")) + "|^ok$" };
 };
+
+// Remembered winner first; codes the user marked "didn't work" for this shop are dropped
+export const order = (codes, saved = {}) =>
+  [...new Set([saved.win, ...codes])].filter((c) => c && !(saved.bad || []).includes(c));

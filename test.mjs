@@ -1,7 +1,7 @@
 // run: node test.mjs
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { build, patterns } from "./markets.js";
+import { build, order, patterns } from "./markets.js";
 
 const load = (f) => JSON.parse(readFileSync(`markets/${f}.json`, "utf8"));
 const global = load("global");
@@ -29,4 +29,7 @@ const cm = build(load("be"), global, ["shop"]);
 assert(cm[0] === "SHOP10" && cm.includes("WELKOM10") && cm.includes("BLACKFRIDAY15"));
 assert.equal(new Set(cm).size, cm.length);
 assert(new RegExp(patterns(load("be"), global).error, "i").test("Deze code is ongeldig"));
+const o = order(["A", "B", "C"], { win: "C", bad: ["B"] });
+assert.deepEqual(o, ["C", "A"], "winner first, bad dropped");
+assert.deepEqual(order(["A", "A"]), ["A"], "no saved entry, deduped");
 console.log("ok", ids.join(","), cm.length);

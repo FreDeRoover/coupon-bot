@@ -23,7 +23,7 @@ Browser extension that tries common discount codes at checkout, in the order sho
 2. Click the extension, pick your market, press **Start trying codes**.
 3. Watch the banner in the corner. Press Stop at any time, and check your total before paying.
 
-It tries one code every 2.5 seconds, so a full miss takes a few minutes.
+It tries one code every 2.5 seconds, so a full miss takes a few minutes. When a code is not rejected, the banner asks whether your total dropped. Press **It worked** and that code goes first on that shop next time. Press **Didn't work** and it is skipped from then on. Both are stored only in your browser, per shop (hostname plus code), and never sent anywhere.
 
 ## Add your country
 

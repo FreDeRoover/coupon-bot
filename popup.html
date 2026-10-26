@@ -5,7 +5,7 @@
 <style>
   :root {
     --paper: #fbf3e4; --ink: #1f1a17; --muted: #6f655b; --line: #d9c9ad;
-    --accent: #e4572e; --accent-ink: #fff; --field: #fffaf0; --bg: #efe2c8;
+    --accent: #e4572e; --ok: #2e7d4f; --accent-ink: #fff; --field: #fffaf0; --bg: #efe2c8;
     --sans: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
     --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   }
@@ -36,6 +36,8 @@
   .gap { margin-top: 12px; }
   small { display: block; margin-top: 6px; color: var(--muted); font-weight: 400; }
 
+  #mem { margin: 12px 0 0; color: var(--ok, #2e7d4f); font-weight: 700; }
+  #mem:empty { display: none; }
   .count { margin: 14px 0 10px; display: flex; align-items: baseline; gap: 8px; animation: rise .4s .24s both; }
   .count strong { font: italic 800 30px/1 var(--serif); }
   .count span { color: var(--muted); }
@@ -73,6 +75,8 @@
   <label class="gap">Shop name <small>Optional. <em>nike</em> also tries NIKE10, NIKE15 ...</small>
     <input id="extra" placeholder="nike, zalando" autocomplete="off">
   </label>
+
+  <p id="mem"></p>
 
   <div class="count"><strong id="n">0</strong><span id="eta"></span></div>
 
