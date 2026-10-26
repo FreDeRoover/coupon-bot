@@ -50,9 +50,30 @@ export async function generate({ algo, count, length = 8, prefix = "", secret = 
   return [...out];
 }
 
-// Guessable promo codes: word x discount, most common percentages first
-const COMMON = "NEWSLETTER WELCOME WELKOM BLACKFRIDAY CYBERMONDAY SUMMER ZOMER SALE FIRST SAVE VIP HELLO THANKS KORTING".split(" ");
-export const common = (extra = []) => {
-  const words = [...new Set([...extra.map((w) => w.trim().toUpperCase()).filter(Boolean), ...COMMON])];
-  return ["10", "15", "20", "5", "25", ""].flatMap((p) => words.map((w) => w + p));
-};
+// Default list, most common first. Sources: public coupon-aggregator rankings
+// (WELCOME*, BLACKFRIDAY*, SAVE*, FREESHIP*, FIRST*/NEWCUSTOMER). The nl-BE and
+// NEWSLETTER entries are common conventions, not ranked data.
+const pct = (w, p) => p.map((n) => w + n);
+const DEFAULT = [
+  ...pct("WELCOME", ["10", "15", "20", "5", "25", "30", "50", "", "BACK", "HOME", "2026", "2025"]),
+  ...pct("NEWSLETTER", ["10", "15", "20", ""]),
+  ...pct("BLACKFRIDAY", ["", "10", "15", "20", "25", "30", "2026", "2025"]),
+  "BF", "BF10", "BF20", ...pct("CYBERMONDAY", ["", "10", "15", "20"]), "CM",
+  ...pct("SAVE", ["10", "15", "20", "5", "25", "30", "50"]),
+  "NEWCUSTOMER", "NEWCUSTOMER10", "FIRSTBUY", "FIRSTORDER", ...pct("FIRST", ["10", "15", "20"]),
+  ...pct("HELLO", ["10", "15", "20"]),
+  ...pct("SIGNUP", ["10", "15", ""]),
+  "FREESHIP", "FREESHIPPING",
+  ...pct("VIP", ["10", "15", "20", ""]),
+  ...pct("THANKS", ["10", "15"]), "THANKYOU", "THANKYOU10",
+  "SPRINGSALE", ...pct("SUMMER", ["10", "15", "20", "SALE"]), "EASTER", "HALLOWEEN", "CHRISTMAS", "XMAS",
+  ...pct("WELKOM", ["10", "15", "20", "5", ""]),
+  ...pct("NIEUWSBRIEF", ["10", "15", ""]),
+  ...pct("KORTING", ["10", "15", "20"]),
+  ...pct("ZOMER", ["10", "15", "20"]), "GRATISVERZENDING", "ZOMERSALE", "WINTERSALE",
+];
+// Shop-name guesses (NIKE10...) go first, then the default list
+export const common = (extra = []) => [...new Set([
+  ...extra.map((w) => w.trim().toUpperCase()).filter(Boolean).flatMap((w) => pct(w, ["10", "15", "20"])),
+  ...DEFAULT,
+])];

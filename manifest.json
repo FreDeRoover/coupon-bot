@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Coupon Bot",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Try common coupon codes at checkout, and generate coupon codes (random, checksum, HMAC-signed).",
   "permissions": ["activeTab", "scripting"],
   "action": { "default_popup": "popup.html" }

@@ -61,7 +61,7 @@ async function tryCodes(codes, delay) {
 
 $("try").onclick = async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  const codes = common($("extra").value.split(",")).slice(0, Math.min(+$("max").value || 30, 60));
+  const codes = common($("extra").value.split(",")).slice(0, Math.min(+$("max").value || 150, 150));
   await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: tryCodes, args: [codes, 2500] });
   window.close();
 };
