@@ -30,9 +30,10 @@
          background: var(--ink); color: var(--paper); font-size: 12px; }
 
   label { display: block; font-weight: 700; animation: rise .4s .16s both; }
-  input { width: 100%; margin-top: 6px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px;
+  select, input { width: 100%; margin-top: 6px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px;
           background: var(--field); color: var(--ink); font: 15px var(--sans); }
-  input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+  select:focus, input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+  .gap { margin-top: 12px; }
   small { display: block; margin-top: 6px; color: var(--muted); font-weight: 400; }
 
   .count { margin: 14px 0 10px; display: flex; align-items: baseline; gap: 8px; animation: rise .4s .24s both; }
@@ -57,7 +58,7 @@
 <main class="ticket">
   <header>
     <h1>Coupon<span>Bot</span></h1>
-    <p>Tries common Belgian discount codes for you.</p>
+    <p>Tries common discount codes for your country.</p>
   </header>
 
   <ol>
@@ -65,7 +66,11 @@
     <li><b>2</b> Press the button below</li>
   </ol>
 
-  <label>Shop name <small>Optional. <em>nike</em> also tries NIKE10, NIKE15 ...</small>
+  <label>Market
+    <select id="market"></select>
+  </label>
+
+  <label class="gap">Shop name <small>Optional. <em>nike</em> also tries NIKE10, NIKE15 ...</small>
     <input id="extra" placeholder="nike, zalando" autocomplete="off">
   </label>
 

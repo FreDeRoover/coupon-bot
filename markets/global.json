@@ -1,0 +1,19 @@
+{
+  "name": "Global",
+  "groups": [
+    {"words": ["WELCOME"], "suffixes": ["10", "15", "20", "5", "25", "30", "", "BACK", "2026"]},
+    {"words": ["NEWSLETTER"], "suffixes": ["10", "15", "20", ""]},
+    {"words": ["BLACKFRIDAY"], "suffixes": ["", "10", "15", "20", "25", "30", "2026"]},
+    {"words": ["CYBERMONDAY"], "suffixes": ["", "10", "15", "20"]},
+    {"words": ["SAVE"], "suffixes": ["10", "15", "20", "5", "25", "30"]},
+    {"words": ["FIRST"], "suffixes": ["10", "15", "20"]},
+    {"words": ["HELLO"], "suffixes": ["10", "15", "20"]},
+    {"words": ["SIGNUP"], "suffixes": ["10", "15", ""]},
+    {"words": ["VIP"], "suffixes": ["10", "15", "20", ""]},
+    {"words": ["APP"], "suffixes": ["5", "10"]},
+    {"words": ["THANKS"], "suffixes": ["10", "15"]},
+    {"words": ["SUMMER"], "suffixes": ["10", "15", "20", "SALE"]}
+  ],
+  "codes": ["BF", "BF10", "BF20", "CM", "FIRSTORDER", "NEWCUSTOMER", "NEWCUSTOMER10", "FIRSTBUY", "THANKYOU", "THANKYOU10", "FREESHIP", "FREESHIPPING", "SPRINGSALE", "EASTER", "HALLOWEEN", "CHRISTMAS", "XMAS"],
+  "ui": {"error": ["invalid", "not valid", "expired", "not found", "doesn't exist", "doesn’t exist", "unknown", "incorrect", "already used", "error"], "field": ["coupon", "promo", "voucher", "discount", "code"], "button": ["apply", "redeem", "submit"]}
+}

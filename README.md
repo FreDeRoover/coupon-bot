@@ -15,3 +15,7 @@ git tag v1.0.0 && git push origin v1.0.0
 ```
 
 CI runs `node test.mjs`, zips the extension and attaches it to a GitHub release. Pushes to `main` build the zip as a workflow artifact only.
+
+## Add your country
+
+Markets are JSON files in [`markets/`](markets). See [CONTRIBUTING.md](CONTRIBUTING.md) - a PR with one file is enough.

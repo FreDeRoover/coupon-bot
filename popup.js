@@ -1,11 +1,12 @@
-import { common } from "./gen.js";
+import { build, patterns, regionOf } from "./markets.js";
 
 const $ = (id) => document.getElementById(id);
 const DELAY = 2500;
 
 // Runs inside the page. Slow on purpose: it stops at the first code that isn't
 // rejected, so it can't hammer a shop's validation endpoint.
-async function tryCodes(codes, delay) {
+async function tryCodes(codes, delay, pat) {
+  const re = (k) => new RegExp(pat[k], "i");
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   document.getElementById("coupon-bot")?.remove();
   const run = (window.__couponRun = (window.__couponRun || 0) + 1); // bumping it cancels this run
@@ -60,17 +61,17 @@ async function tryCodes(codes, delay) {
     return t;
   };
   const field = () => [...document.querySelectorAll("input:not([type=hidden]):not([type=password])")]
-    .find((i) => i.offsetParent && /coupon|promo|voucher|discount|korting|code|bon|réduction|reduction|remise/i.test([i.name, i.id, i.placeholder, i.autocomplete, i.getAttribute("aria-label")].join(" ")));
+    .find((i) => i.offsetParent && re("field").test([i.name, i.id, i.placeholder, i.autocomplete, i.getAttribute("aria-label")].join(" ")));
   const apply = (input) => {
     for (let el = input.parentElement, n = 0; el && n < 4; el = el.parentElement, n++) {
       const b = [...el.querySelectorAll("button, input[type=submit], [role=button]")]
-        .find((x) => /apply|redeem|submit|toepassen|toevoegen|gebruik|activeer|valideer|inwisselen|appliquer|valider|utiliser|ajouter|^ok$/i.test((x.innerText || x.value || "").trim()));
+        .find((x) => re("button").test((x.innerText || x.value || "").trim()));
       if (b) return b.click();
     }
     input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", keyCode: 13, bubbles: true }));
     input.form?.requestSubmit?.();
   };
-  const ERR = /invalid|not valid|expired|not found|doesn.t exist|unknown|incorrect|ongeldig|niet geldig|bestaat niet|verlopen|niet gevonden|onbekend|fout|error|invalide|expiré|introuvable|n.existe pas|erreur|déjà utilisé|al gebruikt|already used/i;
+  const ERR = re("error");
   const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set;
 
   if (!field()) return finish("No coupon field found", "Open the cart or checkout step that has a discount code box, then try again.", false);
@@ -95,25 +96,36 @@ async function tryCodes(codes, delay) {
   finish("No code worked", "Try adding the shop name to the list.", false);
 }
 
-const codes = () => common($("extra").value.split(","));
+const json = (path) => fetch(path).then((r) => r.json());
+const global = await json("markets/global.json");
+const ids = await json("markets/index.json");
+const markets = Object.fromEntries(await Promise.all(ids.map(async (id) => [id, await json(`markets/${id}.json`)])));
+
+// saved choice, else the market matching the browser's region, else global only
+const store = (k, v) => { try { return v === undefined ? localStorage.getItem(k) : localStorage.setItem(k, v); } catch {} };
+for (const id of ids) $("market").add(new Option(markets[id].name, id));
+$("market").add(new Option("Other (global codes only)", ""), 0);
+const guess = ids.find((id) => markets[id].regions.includes(regionOf(navigator.language))) ?? "";
+$("market").value = store("market") ?? guess;
+$("extra").value = store("extra") || "";
+
+const market = () => markets[$("market").value];
+const codes = () => build(market(), global, $("extra").value.split(","));
 
 const update = () => {
   const n = codes().length;
   $("n").textContent = n;
   $("eta").textContent = `codes to try, about ${Math.ceil((n * DELAY) / 60000)} min if none work`;
 };
-try { $("extra").value = localStorage.getItem("extra") || ""; } catch {}
-$("extra").oninput = () => {
-  try { localStorage.setItem("extra", $("extra").value); } catch {}
-  update();
-};
+$("market").onchange = () => { store("market", $("market").value); update(); };
+$("extra").oninput = () => { store("extra", $("extra").value); update(); };
 update();
 
 $("try").onclick = async () => {
   $("err").textContent = "";
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: tryCodes, args: [codes(), DELAY] });
+    await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: tryCodes, args: [codes(), DELAY, patterns(market(), global)] });
     window.close();
   } catch {
     $("err").textContent = "Can't run on this page. Open a shop's cart or checkout tab first.";

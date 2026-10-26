@@ -1,0 +1,23 @@
+{
+  "name": "Belgium (nl-BE, fr-BE)",
+  "regions": ["BE"],
+  "groups": [
+    {"words": ["WELKOM"], "suffixes": ["10", "15", "20", "5", "25", "30", "", "10EURO"]},
+    {"words": ["BIENVENUE"], "suffixes": ["10", "15", "20", "5", "25", "30", ""]},
+    {"words": ["NEW"], "suffixes": ["10", "15", "20", "5"]},
+    {"words": ["NIEUW"], "suffixes": ["10", "15", "20"]},
+    {"words": ["NIEUWSBRIEF"], "suffixes": ["10", "15", "20", ""]},
+    {"words": ["NEWSLETTER"], "suffixes": ["10", "15", "20", ""]},
+    {"words": ["EERSTE"], "suffixes": ["10", "15", "20"]},
+    {"words": ["PREMIERE"], "suffixes": ["10", "15", "20"]},
+    {"words": ["SOLDEN"], "suffixes": ["", "10", "15", "20"]},
+    {"words": ["SOLDES"], "suffixes": ["", "10", "15", "20"]},
+    {"words": ["KORTING"], "suffixes": ["10", "15", "20", "5"]},
+    {"words": ["PROMO"], "suffixes": ["10", "15", "20", "5"]},
+    {"words": ["REDUCTION"], "suffixes": ["10", "15"]},
+    {"words": ["REMISE"], "suffixes": ["10", "15"]},
+    {"words": ["ZOMER"], "suffixes": ["10", "15", "20"]}
+  ],
+  "codes": ["ZOMERSOLDEN", "WINTERSOLDEN", "ZOMERSALE", "WINTERSALE", "SINGLESDAY", "SINGLESDAY11", "MERCI10", "BEDANKT10", "GRATISVERZENDING", "VERZENDGRATIS", "GRATISVERZENDING10", "LIVRAISONGRATUITE", "SINTERKLAAS", "SINT10", "KERST10", "KERST15", "NIEUWJAAR", "PAASEN10", "MOEDERDAG", "MOEDERDAG10", "VADERDAG", "VADERDAG10", "VALENTIJN", "VALENTIJN10", "BELGIE10", "BELGIE", "BELGIQUE10", "BELGIQUE"],
+  "ui": {"error": ["ongeldig", "niet geldig", "bestaat niet", "verlopen", "niet gevonden", "onbekend", "fout", "al gebruikt", "invalide", "expiré", "introuvable", "n'existe pas", "n’existe pas", "erreur", "déjà utilisé"], "field": ["korting", "bon", "réduction", "reduction", "remise"], "button": ["toepassen", "toevoegen", "gebruik", "activeer", "valideer", "inwisselen", "appliquer", "valider", "utiliser", "ajouter"]}
+}
