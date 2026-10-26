@@ -1,6 +1,7 @@
 // Runs inside the page. Slow on purpose: it stops at the first code that isn't
 // rejected, so it can't hammer a shop's validation endpoint.
-export async function tryCodes(codes, delay, pat, key) {
+export async function tryCodes(codes, delay, pat, key, t) {
+  const f = (s, v) => s.replace(/\{(\w+)\}/g, (_, k) => v[k]); // same as fmt() in i18n.js: this function must be self-contained
   const re = (k) => new RegExp(pat[k], "i");
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   document.getElementById("coupon-bot")?.remove();
@@ -34,14 +35,17 @@ export async function tryCodes(codes, delay, pat, key) {
       @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
     </style>
     <div class="card" role="status" aria-live="polite">
-      <div class="top"><span class="brand">Coupon<span>Bot</span></span><button id="x">Stop</button></div>
-      <div class="code" id="code">Looking for coupon field...</div>
+      <div class="top"><span class="brand">Coupon<span>Bot</span></span><button id="x"></button></div>
+      <div class="code" id="code"></div>
       <div class="msg" id="msg"></div>
       <div class="bar"><div class="fill" id="fill"></div></div>
-      <div class="confirm" id="confirm" hidden><button id="yes">It worked</button><button id="no">Didn't work</button></div>
+      <div class="confirm" id="confirm" hidden><button id="yes"></button><button id="no"></button></div>
     </div>`;
   document.documentElement.append(host);
   const $r = (id) => root.getElementById(id);
+  $r("code").textContent = t.lookingField;
+  $r("yes").textContent = t.yes;
+  $r("no").textContent = t.no;
   const card = root.querySelector(".card");
   const finish = (code, msg, ok) => {
     card.classList.add("done");
@@ -49,12 +53,12 @@ export async function tryCodes(codes, delay, pat, key) {
     $r("code").textContent = code;
     $r("msg").textContent = msg;
     $r("confirm").hidden = true;
-    $r("x").textContent = "Close";
+    $r("x").textContent = t.close;
     $r("x").onclick = () => host.remove();
   };
   const armStop = () => {
-    $r("x").textContent = "Stop";
-    $r("x").onclick = () => { window.__couponRun++; finish("Stopped", "Check the cart: the last code tried may still be applied.", false); };
+    $r("x").textContent = t.stop;
+    $r("x").onclick = () => { window.__couponRun++; finish(t.stopped, t.stoppedMsg, false); };
   };
   armStop();
 
@@ -68,11 +72,11 @@ export async function tryCodes(codes, delay, pat, key) {
   const ask = (code) => new Promise((resolve) => {
     card.classList.add("ok");
     $r("code").textContent = code;
-    $r("msg").textContent = "Not rejected. Did your total drop?";
+    $r("msg").textContent = t.askTotal;
     $r("confirm").hidden = false;
     $r("yes").onclick = () => resolve(true);
     $r("no").onclick = () => resolve(false);
-    $r("x").textContent = "Close";
+    $r("x").textContent = t.close;
     $r("x").onclick = () => resolve(null);
   });
 
@@ -97,14 +101,14 @@ export async function tryCodes(codes, delay, pat, key) {
   const ERR = re("error");
   const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set;
 
-  if (!field()) return finish("No coupon field found", "Open the cart or checkout step that has a discount code box, then try again.", false);
+  if (!field()) return finish(t.noField, t.noFieldMsg, false);
 
   for (const [i, code] of codes.entries()) {
     const input = field();
     if (window.__couponRun !== run) return; // stopped
     if (!input) break;
     $r("code").textContent = code;
-    $r("msg").textContent = `Trying ${i + 1} of ${codes.length}`;
+    $r("msg").textContent = f(t.trying, { i: i + 1, n: codes.length });
     $r("fill").style.width = `${(i / codes.length) * 100}%`;
     const before = lines();
     const seen = [];
@@ -126,12 +130,12 @@ export async function tryCodes(codes, delay, pat, key) {
     if (worked === null) return host.remove();
     if (worked) {
       await save((s) => { s.win = code; s.bad = (s.bad || []).filter((c) => c !== code); });
-      return finish(code, `Saved for ${key}. Enjoy the discount.`, true);
+      return finish(code, f(t.saved, { shop: key }), true);
     }
     await save((s) => { s.bad = [...(s.bad || []), code]; if (s.win === code) delete s.win; });
     card.classList.remove("ok");
     $r("confirm").hidden = true;
     armStop();
   }
-  finish("No code worked", "Try adding the shop name to the list.", false);
+  finish(t.noCode, t.noCodeMsg, false);
 }

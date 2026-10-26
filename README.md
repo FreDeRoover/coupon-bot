@@ -25,9 +25,9 @@ Browser extension that tries common discount codes at checkout, in the order sho
 
 It tries one code every 2.5 seconds, so a full miss takes a few minutes. When a code is not rejected, the banner asks whether your total dropped. Press **It worked** and that code goes first on that shop next time. Press **Didn't work** and it is skipped from then on. Both are stored only in your browser, per shop (hostname plus code), and never sent anywhere.
 
-## Add your country
+## Add your country or language
 
-Markets are JSON files in [`markets/`](markets). A PR with one file is enough:
+The popup and banner are available in English, Dutch and French, following your browser language. Markets are JSON files in [`markets/`](markets) and translations are in [`locales/`](locales). A PR with one file is enough:
 
 <details>
 <summary>What a market file looks like</summary>

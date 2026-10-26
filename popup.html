@@ -60,28 +60,28 @@
 <main class="ticket">
   <header>
     <h1>Coupon<span>Bot</span></h1>
-    <p>Tries common discount codes for your country.</p>
+    <p data-i18n="subtitle"></p>
   </header>
 
   <ol>
-    <li><b>1</b> Open the cart or checkout page</li>
-    <li><b>2</b> Press the button below</li>
+    <li><b>1</b> <span data-i18n="step1"></span></li>
+    <li><b>2</b> <span data-i18n="step2"></span></li>
   </ol>
 
-  <label>Market
+  <label><span data-i18n="market"></span>
     <select id="market"></select>
   </label>
 
-  <label class="gap">Shop name <small>Optional. <em>nike</em> also tries NIKE10, NIKE15 ...</small>
-    <input id="extra" placeholder="nike, zalando" autocomplete="off">
+  <label class="gap"><span data-i18n="shop"></span> <small data-i18n="shopHint"></small>
+    <input id="extra" data-i18n-placeholder="shopPlaceholder" autocomplete="off">
   </label>
 
   <p id="mem"></p>
 
   <div class="count"><strong id="n">0</strong><span id="eta"></span></div>
 
-  <button id="try">Start trying codes</button>
+  <button id="try" data-i18n="start"></button>
   <p id="err" role="alert"></p>
-  <footer>Stops at the first code the shop accepts. Always check your total before paying.</footer>
+  <footer data-i18n="footer"></footer>
 </main>
 <script type="module" src="popup.js"></script>
