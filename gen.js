@@ -49,3 +49,10 @@ export async function generate({ algo, count, length = 8, prefix = "", secret = 
   while (out.size < count) out.add((prefix ? prefix + "-" : "") + (await one[algo]({ length, secret })));
   return [...out];
 }
+
+// Guessable promo codes: word x discount, most common percentages first
+const COMMON = "NEWSLETTER WELCOME WELKOM BLACKFRIDAY CYBERMONDAY SUMMER ZOMER SALE FIRST SAVE VIP HELLO THANKS KORTING".split(" ");
+export const common = (extra = []) => {
+  const words = [...new Set([...extra.map((w) => w.trim().toUpperCase()).filter(Boolean), ...COMMON])];
+  return ["10", "15", "20", "5", "25", ""].flatMap((p) => words.map((w) => w + p));
+};

@@ -1,6 +1,6 @@
 // run: node test.mjs
 import assert from "node:assert/strict";
-import { generate, validCheck, validSigned, withCheck } from "./gen.js";
+import { common, generate, validCheck, validSigned, withCheck } from "./gen.js";
 
 const base = { count: 200, length: 8 };
 for (const algo of ["random", "checksum", "signed", "words"]) {
@@ -18,4 +18,7 @@ assert(validCheck(withCheck("ABCDEFGH")));
 const s = (await generate({ algo: "signed", count: 1, secret: "k" }))[0];
 assert(await validSigned("k", s));
 assert(!(await validSigned("other", s)));
+const cm = common(["shop"]);
+assert(cm.includes("NEWSLETTER10") && cm.includes("BLACKFRIDAY15") && cm[0] === "SHOP10");
+assert.equal(new Set(cm).size, cm.length);
 console.log("ok");
