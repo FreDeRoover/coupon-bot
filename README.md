@@ -1,6 +1,6 @@
 # Coupon Bot
 
-Browser extension (Chrome, Brave, any Chromium) that tries common Belgian (nl-BE/fr-BE) coupon codes at checkout, and generates codes: random, Luhn mod 32 checksum, HMAC-signed, word-based.
+Browser extension (Chrome, Brave, any Chromium) that tries common Belgian (nl-BE/fr-BE) coupon codes at checkout.
 
 ## Install
 

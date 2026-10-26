@@ -3,29 +3,11 @@
 <style>
   body { width: 340px; font: 13px system-ui; margin: 12px; }
   label { display: block; margin-top: 8px; }
-  input, select, textarea { width: 100%; box-sizing: border-box; }
+  input { width: 100%; box-sizing: border-box; }
   button { margin-top: 10px; }
-  #err { color: #b00; }
 </style>
 <b>Try codes on this page</b>
 <label>Extra words (shop name, comma separated) <input id="extra" placeholder="nike, zalando"></label>
 <label>Max attempts <input id="max" type="number" min="1" max="150" value="150"></label>
 <button id="try">Try common codes</button> <button id="stop">Stop</button>
-<hr>
-<b>Generate codes</b>
-<label>Algorithm
-  <select id="algo">
-    <option value="random">Random (crypto)</option>
-    <option value="checksum">Checksum (Luhn mod 32)</option>
-    <option value="signed">HMAC-signed</option>
-    <option value="words">Word-based</option>
-  </select>
-</label>
-<label>Count <input id="count" type="number" min="1" max="1000" value="10"></label>
-<label>Length <input id="length" type="number" min="4" max="32" value="8"></label>
-<label>Prefix <input id="prefix" placeholder="SUMMER"></label>
-<label id="secretRow" hidden>Secret <input id="secret"></label>
-<button id="go">Generate</button> <button id="copy">Copy</button>
-<span id="err"></span>
-<textarea id="out" rows="10" readonly></textarea>
 <script type="module" src="popup.js"></script>
