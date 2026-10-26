@@ -1,13 +1,78 @@
 <!doctype html>
 <meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<title>Coupon Bot</title>
 <style>
-  body { width: 340px; font: 13px system-ui; margin: 12px; }
-  label { display: block; margin-top: 8px; }
-  input { width: 100%; box-sizing: border-box; }
-  button { margin-top: 10px; }
+  :root {
+    --paper: #fbf3e4; --ink: #1f1a17; --muted: #6f655b; --line: #d9c9ad;
+    --accent: #e4572e; --accent-ink: #fff; --field: #fffaf0; --bg: #efe2c8;
+    --sans: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #2a2420; --ink: #f6ead7; --muted: #b3a593; --line: #54483c; --field: #1f1a17; --bg: #171310; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; width: 340px; padding: 14px; background: var(--bg); color: var(--ink); font: 14px/1.4 var(--sans); }
+
+  .ticket {
+    background: var(--paper); border-radius: 14px; padding: 18px 18px 16px;
+    box-shadow: 0 1px 0 var(--line), 0 8px 20px -10px rgba(60, 35, 10, .35);
+  }
+  header { padding-bottom: 14px; margin-bottom: 14px; border-bottom: 2px dashed var(--line); animation: rise .4s both; }
+  h1 { margin: 0; font: italic 800 26px/1 var(--serif); letter-spacing: -.01em; }
+  h1 span { color: var(--accent); }
+  header p { margin: 6px 0 0; color: var(--muted); }
+
+  ol { margin: 0 0 14px; padding: 0; list-style: none; display: grid; gap: 6px; animation: rise .4s .08s both; }
+  li { display: flex; gap: 10px; align-items: center; }
+  li b { flex: none; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%;
+         background: var(--ink); color: var(--paper); font-size: 12px; }
+
+  label { display: block; font-weight: 700; animation: rise .4s .16s both; }
+  input { width: 100%; margin-top: 6px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px;
+          background: var(--field); color: var(--ink); font: 15px var(--sans); }
+  input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+  small { display: block; margin-top: 6px; color: var(--muted); font-weight: 400; }
+
+  .count { margin: 14px 0 10px; display: flex; align-items: baseline; gap: 8px; animation: rise .4s .24s both; }
+  .count strong { font: italic 800 30px/1 var(--serif); }
+  .count span { color: var(--muted); }
+
+  button { width: 100%; padding: 13px; border: 0; border-radius: 12px; background: var(--accent); color: var(--accent-ink);
+           font: 800 15px var(--sans); cursor: pointer; box-shadow: 0 3px 0 color-mix(in srgb, var(--accent) 65%, #000);
+           transition: transform .08s, box-shadow .08s; animation: rise .4s .3s both; }
+  button:hover { filter: brightness(1.06); }
+  button:active { transform: translateY(2px); box-shadow: 0 1px 0 color-mix(in srgb, var(--accent) 65%, #000); }
+  button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+  #err { margin: 10px 0 0; color: var(--accent); font-weight: 700; }
+  #err:empty { display: none; }
+  footer { margin-top: 12px; color: var(--muted); font-size: 12px; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
-<b>Try codes on this page</b>
-<label>Extra words (shop name, comma separated) <input id="extra" placeholder="nike, zalando"></label>
-<label>Max attempts <input id="max" type="number" min="1" max="150" value="150"></label>
-<button id="try">Try common codes</button> <button id="stop">Stop</button>
+
+<main class="ticket">
+  <header>
+    <h1>Coupon<span>Bot</span></h1>
+    <p>Tries common Belgian discount codes for you.</p>
+  </header>
+
+  <ol>
+    <li><b>1</b> Open the cart or checkout page</li>
+    <li><b>2</b> Press the button below</li>
+  </ol>
+
+  <label>Shop name <small>Optional. <em>nike</em> also tries NIKE10, NIKE15 ...</small>
+    <input id="extra" placeholder="nike, zalando" autocomplete="off">
+  </label>
+
+  <div class="count"><strong id="n">0</strong><span id="eta"></span></div>
+
+  <button id="try">Start trying codes</button>
+  <p id="err" role="alert"></p>
+  <footer>Stops at the first code the shop accepts. Always check your total before paying.</footer>
+</main>
 <script type="module" src="popup.js"></script>
