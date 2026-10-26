@@ -28,17 +28,17 @@ async function tryCodes(codes, delay) {
   const say = (t) => (bar.textContent = "Coupon Bot: " + t);
   const lines = () => new Set(document.body.innerText.split("\n").map((s) => s.trim()).filter((s) => s && !s.startsWith("Coupon Bot")));
   const field = () => [...document.querySelectorAll("input:not([type=hidden]):not([type=password])")]
-    .find((i) => i.offsetParent && /coupon|promo|voucher|discount|korting|code/i.test([i.name, i.id, i.placeholder, i.autocomplete, i.getAttribute("aria-label")].join(" ")));
+    .find((i) => i.offsetParent && /coupon|promo|voucher|discount|korting|code|bon|réduction|reduction|remise/i.test([i.name, i.id, i.placeholder, i.autocomplete, i.getAttribute("aria-label")].join(" ")));
   const apply = (input) => {
     for (let el = input.parentElement, n = 0; el && n < 4; el = el.parentElement, n++) {
       const b = [...el.querySelectorAll("button, input[type=submit], [role=button]")]
-        .find((x) => /apply|redeem|submit|toepassen|toevoegen|gebruik|activeer|valideer|^ok$/i.test((x.innerText || x.value || "").trim()));
+        .find((x) => /apply|redeem|submit|toepassen|toevoegen|gebruik|activeer|valideer|inwisselen|appliquer|valider|utiliser|ajouter|^ok$/i.test((x.innerText || x.value || "").trim()));
       if (b) return b.click();
     }
     input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", keyCode: 13, bubbles: true }));
     input.form?.requestSubmit?.();
   };
-  const ERR = /invalid|not valid|expired|not found|doesn.t exist|unknown|incorrect|ongeldig|niet geldig|bestaat niet|verlopen|niet gevonden|onbekend|fout|error/i;
+  const ERR = /invalid|not valid|expired|not found|doesn.t exist|unknown|incorrect|ongeldig|niet geldig|bestaat niet|verlopen|niet gevonden|onbekend|fout|error|invalide|expiré|introuvable|n.existe pas|incorrect|erreur|déjà utilisé|al gebruikt|already used/i;
   const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set;
 
   window.__couponStop = false;
