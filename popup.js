@@ -1,4 +1,4 @@
-import { build, patterns, regionOf } from "./markets.js";
+import { build, patterns } from "./markets.js";
 
 const $ = (id) => document.getElementById(id);
 const DELAY = 2500;
@@ -102,12 +102,11 @@ const ids = await json("markets/index.json");
 const markets = Object.fromEntries(await Promise.all(ids.map(async (id) => [id, await json(`markets/${id}.json`)])));
 
 // saved choice, else the market matching the browser's region, else global only
-const store = (k, v) => { try { return v === undefined ? localStorage.getItem(k) : localStorage.setItem(k, v); } catch {} };
 for (const id of ids) $("market").add(new Option(markets[id].name, id));
 $("market").add(new Option("Other (global codes only)", ""), 0);
-const guess = ids.find((id) => markets[id].regions.includes(regionOf(navigator.language))) ?? "";
-$("market").value = store("market") ?? guess;
-$("extra").value = store("extra") || "";
+const guess = ids.find((id) => markets[id].regions.includes(new Intl.Locale(navigator.language).region)) ?? "";
+$("market").value = localStorage.getItem("market") ?? guess;
+$("extra").value = localStorage.getItem("extra") || "";
 
 const market = () => markets[$("market").value];
 const codes = () => build(market(), global, $("extra").value.split(","));
@@ -117,8 +116,8 @@ const update = () => {
   $("n").textContent = n;
   $("eta").textContent = `codes to try, about ${Math.ceil((n * DELAY) / 60000)} min if none work`;
 };
-$("market").onchange = () => { store("market", $("market").value); update(); };
-$("extra").oninput = () => { store("extra", $("extra").value); update(); };
+$("market").onchange = () => { localStorage.setItem("market", $("market").value); update(); };
+$("extra").oninput = () => { localStorage.setItem("extra", $("extra").value); update(); };
 update();
 
 $("try").onclick = async () => {

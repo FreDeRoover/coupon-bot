@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Coupon Bot",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Try common coupon codes for your country at checkout.",
   "permissions": ["activeTab", "scripting"],
   "action": { "default_popup": "popup.html" }

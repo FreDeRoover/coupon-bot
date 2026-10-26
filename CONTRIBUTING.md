@@ -11,7 +11,7 @@ Markets are plain JSON files. No JavaScript needed.
    - `ui.error`, `ui.field`, `ui.button`: the words shops in your language use for "invalid code", the coupon input (name/placeholder) and the apply button. English ones are always included.
 3. Add your file name (without `.json`) to `markets/index.json`.
 4. Run `node test.mjs`. It checks the file format and that the index is complete.
-5. Open a PR. Say in the description where the codes come from.
+5. Open a PR. Say in the description where the codes come from (links).
 
 ## Rules
 

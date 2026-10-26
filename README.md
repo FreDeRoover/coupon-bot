@@ -14,7 +14,7 @@ Browser extension (Chrome, Brave, any Chromium) that tries common Belgian (nl-BE
 git tag v1.0.0 && git push origin v1.0.0
 ```
 
-CI runs `node test.mjs`, zips the extension and attaches it to a GitHub release. Pushes to `main` build the zip as a workflow artifact only.
+CI runs `node test.mjs` on every push and PR. A `v*` tag also zips the extension and attaches it to a GitHub release.
 
 ## Add your country
 
