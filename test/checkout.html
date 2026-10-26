@@ -1,0 +1,32 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Fake checkout</title>
+<!-- Test fixture, not shipped. ?lang=fr switches to French labels and errors.
+     Behaves like a real shop: the same error text is shown again on every bad code. -->
+<h1>Winkelmandje</h1>
+<p>Sneakers x1 <span id="line">&euro;100,00</span></p>
+<form id="f">
+  <input id="coupon" name="discount_code" autocomplete="off">
+  <button type="button" id="apply"></button>
+</form>
+<p id="msg"></p>
+<p><b id="total">Totaal: &euro;100,00</b></p>
+<script>
+  const fr = new URLSearchParams(location.search).get("lang") === "fr";
+  const T = fr
+    ? { placeholder: "Code promo", button: "Appliquer", bad: "Code promo invalide", ok: "Réduction appliquée" }
+    : { placeholder: "Kortingscode", button: "Toepassen", bad: "Deze kortingscode is ongeldig", ok: "Korting toegepast" };
+  const VALID = { BIENVENUE10: 10, WELKOM10: 10 };
+  coupon.placeholder = T.placeholder;
+  apply.textContent = T.button;
+  apply.onclick = () => {
+    const pct = VALID[coupon.value];
+    msg.replaceChildren(); // like a framework re-render: node is rebuilt each time
+    setTimeout(() => {
+      const el = document.createElement("span");
+      el.textContent = pct ? T.ok : T.bad;
+      msg.append(el);
+      if (pct) total.textContent = "Totaal: €" + (100 - pct).toFixed(2).replace(".", ",");
+    }, 50);
+  };
+</script>

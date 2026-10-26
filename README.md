@@ -52,5 +52,5 @@ Markets are JSON files in [`markets/`](markets). A PR with one file is enough:
 git tag v1.0.0 && git push origin v1.0.0
 ```
 
-CI runs `node test.mjs` on every push and PR. A `v*` tag also zips the extension and attaches it to a GitHub release.
+CI runs `npm test` on every push and PR: unit checks plus the page script against a fake checkout in `test/` (set `BROWSER` to a Chromium-based binary such as Brave if you have no Chrome). A `v*` tag also zips the extension and attaches it to a GitHub release.
 </details>
