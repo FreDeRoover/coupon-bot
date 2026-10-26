@@ -18,4 +18,4 @@ CI runs `node test.mjs` on every push and PR. A `v*` tag also zips the extension
 
 ## Add your country
 
-Markets are JSON files in [`markets/`](markets). See [CONTRIBUTING.md](CONTRIBUTING.md) - a PR with one file is enough.
+Markets are JSON files in [`markets/`](markets). A PR with one file is enough: see [CONTRIBUTING.md](CONTRIBUTING.md).
