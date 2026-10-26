@@ -1,0 +1,7 @@
+{
+  "manifest_version": 3,
+  "name": "Coupon Bot",
+  "version": "1.0.0",
+  "description": "Generate coupon codes: random, word-based, checksum (Luhn mod 32) and HMAC-signed.",
+  "action": { "default_popup": "popup.html" }
+}
